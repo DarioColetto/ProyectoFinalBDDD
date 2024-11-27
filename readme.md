@@ -44,7 +44,7 @@ CREATE DATABASE databasename;
 ##### Cambiar 'databasename' por el nombre de su base de datos.
 
 ### Diagrama
-![alt text](SQL\diagrama.png)
+![alt text](.\SQL\diagrama.png)
 
 Las entidades clave son:
 
