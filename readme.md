@@ -94,16 +94,16 @@ Inserta algunos datos iniciales en las tablas para realizar pruebas:
 ```sql
 -- Productos
 INSERT INTO Productos (nombre, descripcion, categoria, precio, stock) VALUES
-('Producto1', 'Descripción de Producto1', 'Categoría1', 10.00, 100),
-('Producto2', 'Descripción de Producto2', 'Categoría2', 15.00, 50),
-('Producto3', 'Descripción de Producto3', 'Categoría3', 20.00, 30),
-('Producto4', 'Descripción de Producto4', 'Categoría1', 25.00, 40),
-('Producto5', 'Descripción de Producto5', 'Categoría2', 30.00, 20),
-('Producto6', 'Descripción de Producto6', 'Categoría3', 35.00, 10),
-('Producto7', 'Descripción de Producto7', 'Categoría1', 40.00, 15),
-('Producto8', 'Descripción de Producto8', 'Categoría2', 45.00, 25),
-('Producto9', 'Descripción de Producto9', 'Categoría3', 50.00, 35),
-('Producto10', 'Descripción de Producto10', 'Categoría1', 55.00, 5);
+('Producto1', 'Descripción de Producto1', 'Categoria1', 10.00, 100),
+('Producto2', 'Descripción de Producto2', 'Categoria2', 15.00, 50),
+('Producto3', 'Descripción de Producto3', 'Categoria3', 20.00, 30),
+('Producto4', 'Descripción de Producto4', 'Categoria1', 25.00, 40),
+('Producto5', 'Descripción de Producto5', 'Categoria2', 30.00, 20),
+('Producto6', 'Descripción de Producto6', 'Categoria3', 35.00, 10),
+('Producto7', 'Descripción de Producto7', 'Categoria1', 40.00, 15),
+('Producto8', 'Descripción de Producto8', 'Categoria2', 45.00, 25),
+('Producto9', 'Descripción de Producto9', 'Categoria3', 50.00, 35),
+('Producto10', 'Descripción de Producto10', 'Categoria1', 55.00, 5);
 
 -- Clientes
 INSERT INTO Clientes (nombre, email, telefono, direccion) VALUES
