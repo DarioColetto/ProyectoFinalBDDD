@@ -96,6 +96,24 @@ class ProductoRepo(Repository):
         return productos
         
 
-    def getByCategoria(self, categoria:Categoria):
-        pass
+    def getByCategoria(self, categoria:str):
+        productos = []
+        query = """ SElECT * FROM productos WHERE categoria = %s """
+        with Conection() as cnx:
+            # Usa un wildcard con parámetros seguros.
+            cnx.execute(query, (categoria,))
+            rows = cnx.fetchall()
+
+            for row in rows:
+                producto = Producto(
+                    id_producto=row[0],
+                    nombre=row[1],
+                    descripcion=row[2],
+                    categoria=Categoria(row[3]),
+                    precio=row[4],
+                    stock=row[5]
+                )
+                productos.append(producto)
+
+        return productos
     

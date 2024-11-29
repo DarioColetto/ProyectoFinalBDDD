@@ -24,6 +24,7 @@ class ProductoView(Treeview):
         self.string_listener = StringVar(self)
         self.int_var = IntVar(self)
         
+        
         self.widgetFrame = ProductoMenuBar(self, self.int_var )
         self.widgetFrame.pack(side='bottom')
         self.pack(side='left', fill='both', expand=True)
@@ -49,11 +50,14 @@ class ProductoView(Treeview):
         self.config(displaycolumns=['#1', '#2','#3', '#4', '#5', '#6' ]) 
 
         self.bind('<ButtonRelease-1>', self.get_selected_item) #Cambia el estado de los botones Edit y Delet
+        self.widgetFrame.categoria_listener.trace_add('write', self.option_selected)
 
         #TRACERS
 
         self.widgetFrame.string_listener.trace_add("write", self.refresh_by_search)
         self.int_var.trace_add("write", self.refresh_view)
+
+        # self.widgetFrame.entry_search.bind(('<<ComboboxSelected>>', self.option_selected))
 
     def load_data(self,  *arg):
         
@@ -104,7 +108,14 @@ class ProductoView(Treeview):
             self.delete(child)
 
 
-
+    def option_selected(self, *args):
+        value = self.widgetFrame.entry_categoria.get()
+        print(value)
+        
+        if value:
+            self.clean_view()
+            rows = ProductoRepo().getByCategoria(value)
+            self.insert_rows(rows)
 
 
     # def focus_row(self):

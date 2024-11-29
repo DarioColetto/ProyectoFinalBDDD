@@ -1,7 +1,9 @@
 from tkinter import Entry, Frame, IntVar, Label, StringVar, messagebox
+from tkinter.ttk import Combobox
 from GUI.components.widgets.Button import Button_
 from GUI.components.windows.producto.create_producto_window import CreateProductoWindow
 from GUI.components.windows.producto.update_producto_window import UpdateProductoWindow
+from models.categoria import Categoria
 from models.producto import Producto
 from repository.productoRepo import ProductoRepo
 
@@ -20,6 +22,7 @@ class ProductoMenuBar(Frame):
         
         self.string_listener = StringVar(self, '') 
         self.int_var= int_var
+        self.categoria_listener = StringVar(self)
         
         self.search_label=Label(self,width=20, background=self.bg_color ,text="Buscar")
         self.search_label.pack(side='left')
@@ -27,6 +30,14 @@ class ProductoMenuBar(Frame):
         self.entry_search=Entry(self, textvariable = self.string_listener , fg='grey20' )
         self.entry_search.pack(side='left')
         self.entry_search.focus()
+
+        #Categoria
+        self.label_categoria=Label(self , text="Categoria" ,background="darkgoldenrod2",compound='right',padx=5 )
+        self.label_categoria.pack(side='left')
+        
+        self.entry_categoria=Combobox(self, state='readonly',  textvariable= self.categoria_listener, values= Categoria.list() )
+        self.entry_categoria.pack(side='left')
+        
         
         
         self.add_btn=Button_(self,bg_color=self.bg_color, padx=10, text="Add",compound="left", width=self.buttonWidth, command = self.create_window )
@@ -40,11 +51,11 @@ class ProductoMenuBar(Frame):
         self.delete_btn=Button_(self,text="Del",bg_color=self.bg_color, padx=10, compound="left" , width=self.buttonWidth, command=self.delete_window) 
         self.delete_btn.pack(side='left') 
 
-        #TRACERS
 
-        #self.string_listener.trace_add("write", self.text_changed)
         
-    
+        
+        
+
     def text_changed(self, *arg): 
 
         
@@ -71,3 +82,8 @@ class ProductoMenuBar(Frame):
         if resp:
             ProductoRepo().delete(self.producto.id_producto)
             self.int_var.set(self.producto.id_producto)
+
+    def option_selected(self, *ars):
+        
+        print("algo paso!")
+      
