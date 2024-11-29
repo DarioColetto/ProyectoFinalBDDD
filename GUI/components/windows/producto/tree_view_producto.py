@@ -24,7 +24,7 @@ class ProductoView(Treeview):
         self.string_listener = StringVar(self)
         self.int_var = IntVar(self)
         
-        self.widgetFrame = ProductoMenuBar(self, self.int_var, self.string_listener)
+        self.widgetFrame = ProductoMenuBar(self, self.int_var )
         self.widgetFrame.pack(side='bottom')
         self.pack(side='left', fill='both', expand=True)
 
@@ -52,7 +52,7 @@ class ProductoView(Treeview):
 
         #TRACERS
 
-        self.string_listener.trace_add("write", self.refresh_view)
+        self.widgetFrame.string_listener.trace_add("write", self.refresh_by_search)
         self.int_var.trace_add("write", self.refresh_view)
 
     def load_data(self,  *arg):
@@ -85,18 +85,17 @@ class ProductoView(Treeview):
         
     def refresh_view(self,  *arg):
 
-        print(self.int_var.get())
-
         self.clean_view()
-        self.load_data()   
+         
              
+    def refresh_by_search(self, *args):
 
-
-    # def refresh_by_search(self, *args):
-
-    #     rows = Repository().get_by_query(common.string_listener.get())
-    #     self.insert_rows(rows)
-    #     self.focus_row()            
+        nombre =  self.widgetFrame.string_listener.get()
+        if nombre:
+            self.clean_view()
+            rows = ProductoRepo().getByNombre(nombre)
+            self.insert_rows(rows)
+        #self.focus_row()            
 
 
     def clean_view(self):

@@ -13,12 +13,12 @@ class ProductoMenuBar(Frame):
     producto:Producto
     bg_color="darkgoldenrod2"
     
-    def __init__(self, master, int_var:IntVar, string_listener:StringVar ):
+    def __init__(self, master, int_var:IntVar):
         
         super().__init__(master, background=self.bg_color )
         self.pack(side='top', fill="both",  pady=5) 
         
-        self.string_listener = string_listener
+        self.string_listener = StringVar(self, '') 
         self.int_var= int_var
         
         self.search_label=Label(self,width=20, background=self.bg_color ,text="Buscar")
@@ -42,17 +42,19 @@ class ProductoMenuBar(Frame):
 
         #TRACERS
 
-        self.string_listener.trace_add("write", self.text_changed)
+        #self.string_listener.trace_add("write", self.text_changed)
         
     
-    def text_changed(self, *args): 
-        
-        entry_string = self.entry_search.get()
+    def text_changed(self, *arg): 
 
-        print(entry_string)
         
-        if entry_string:
-            self.string_listener.set(entry_string)
+        print(" From child: ", self.string_listener.get() )
+       
+        self.string_listener.set( self.string_listener.get())
+
+        #return self.string_listener.get()
+        
+
             
             
     def update_window(self):

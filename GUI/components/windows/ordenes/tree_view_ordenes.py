@@ -1,5 +1,6 @@
 from tkinter.ttk import Treeview, Scrollbar
 from models.orden import Orden
+from models.ordenDTO import OrdenDTO
 from ...ttk_styles import TreeViewStyle
 from repository.ordenRepo import OrdenRepo
 
@@ -12,7 +13,7 @@ class OrdenesView(Treeview):
         
 
         columns_ids = ['#1','#2','#3', '#4', '#5']
-        columns_names = ["Id","Id cliente","Id Producto", "Fecha", "Cantidad"]
+        columns_names = ["Orden Id","Cliente","Producto", "Fecha", "Cantidad"]
         
         super().__init__(master, columns=columns_ids ,show="headings", selectmode='browse')
         
@@ -50,10 +51,10 @@ class OrdenesView(Treeview):
         rows = self.repo.get_all()
         self.insert_rows(rows)
 
-    def insert_rows(self, rows:list[Orden]):
+    def insert_rows(self, rows:list[OrdenDTO]):
             
          for row in rows:
-            self.insert("", "end", text=row, values=(row.id_orden ,row.id_cliente, row.id_producto, row.fecha, row.cantidad))    
+            self.insert("", "end", text=row, values=(row.id_orden ,row.cliente, row.producto, row.fecha, row.cantidad))    
 
     # def get_selected_item(self,  *arg):
         

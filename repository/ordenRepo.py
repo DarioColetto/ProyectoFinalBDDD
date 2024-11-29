@@ -1,3 +1,5 @@
+
+from models.ordenDTO import OrdenDTO
 from .reposotory import Repository
 from .database import Conection
 from models.orden import Orden
@@ -19,19 +21,23 @@ class OrdenRepo(Repository):
     def get_all(self):
 
         ordenes = []
-        query = "SELECT * FROM ordenes;"
+        query = """SELECT Ordenes.Id_orden, Clientes.nombre AS cliente, Productos.nombre AS producto, Ordenes.cantidad, Ordenes.fecha
+                FROM Ordenes
+                INNER JOIN Clientes ON Ordenes.id_cliente = Clientes.id_cliente
+                INNER JOIN Productos ON Ordenes.id_producto = Productos.id_producto;"""
         with Conection() as cnx:
             cnx.execute(query)
             rows = cnx.fetchall()
 
         for row in rows:    
 
-            orden = Orden(
+            orden = OrdenDTO(
                 id_orden=row[0],
-                id_cliente= row[1], 
-                id_producto=row[2], 
-                fecha=row[3],
-                cantidad=  row[4]) 
+                cliente= row[1], 
+                producto=row[2],
+                cantidad=  row[3],  
+                fecha=row[4])
+                
             ordenes.append(orden)
             
         return ordenes

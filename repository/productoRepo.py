@@ -74,6 +74,28 @@ class ProductoRepo(Repository):
             return f"Producto {id} eliminado."
 
 
+    def getByNombre(self, nombre: str):
+        productos = []
+        query = """ SELECT * FROM productos WHERE nombre LIKE %s """
+        with Conection() as cnx:
+            # Usa un wildcard con parámetros seguros.
+            cnx.execute(query, (f"%{nombre}%",))
+            rows = cnx.fetchall()
 
+            for row in rows:
+                producto = Producto(
+                    id_producto=row[0],
+                    nombre=row[1],
+                    descripcion=row[2],
+                    categoria=Categoria(row[3]),
+                    precio=row[4],
+                    stock=row[5]
+                )
+                productos.append(producto)
 
+        return productos
+        
+
+    def getByCategoria(self, categoria:Categoria):
+        pass
     
