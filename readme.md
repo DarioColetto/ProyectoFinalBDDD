@@ -44,7 +44,7 @@ CREATE DATABASE databasename;
 ##### Cambiar 'databasename' por el nombre de su base de datos.
 
 ### Diagrama
-![alt text](.\SQL\diagrama.png)
+![alt text](https://github.com/DarioColetto/ProyectoFinalBDDD/blob/main/SQL/diagrama.png)
 
 Las entidades clave son:
 
@@ -94,18 +94,69 @@ Inserta algunos datos iniciales en las tablas para realizar pruebas:
 ```sql
 -- Productos
 INSERT INTO Productos (nombre, descripcion, categoria, precio, stock) VALUES
-('Producto1', 'Descripción de Producto1', 'Categoría1', 10.00, 100),
-('Producto2', 'Descripción de Producto2', 'Categoría1', 15.00, 50)
+('Producto1', 'Descripción de Producto1', 'Categoria1', 10.00, 100),
+('Producto2', 'Descripción de Producto2', 'Categoria2', 15.00, 50),
+('Producto3', 'Descripción de Producto3', 'Categoria3', 20.00, 30),
+('Producto4', 'Descripción de Producto4', 'Categoria1', 25.00, 40),
+('Producto5', 'Descripción de Producto5', 'Categoria2', 30.00, 20),
+('Producto6', 'Descripción de Producto6', 'Categoria3', 35.00, 10),
+('Producto7', 'Descripción de Producto7', 'Categoria1', 40.00, 15),
+('Producto8', 'Descripción de Producto8', 'Categoria2', 45.00, 25),
+('Producto9', 'Descripción de Producto9', 'Categoria3', 50.00, 35),
+('Producto10', 'Descripción de Producto10', 'Categoria1', 55.00, 5);
 
 -- Clientes
 INSERT INTO Clientes (nombre, email, telefono, direccion) VALUES
 ('Cliente1', 'cliente1@email.com', '1234567890', 'Dirección 1'),
-('Cliente2', 'cliente2@email.com', '0987654321', 'Dirección 2')
+('Cliente2', 'cliente2@email.com', '0987654321', 'Dirección 2'),
+('Cliente3', 'cliente3@email.com', '5678901234', 'Dirección 3'),
+('Cliente4', 'cliente4@email.com', '4321098765', 'Dirección 4'),
+('Cliente5', 'cliente5@email.com', '6789012345', 'Dirección 5'),
+('Cliente6', 'cliente6@email.com', '8901234567', 'Dirección 6'),
+('Cliente7', 'cliente7@email.com', '2345678901', 'Dirección 7'),
+('Cliente8', 'cliente8@email.com', '7654321098', 'Dirección 8'),
+('Cliente9', 'cliente9@email.com', '3456789012', 'Dirección 9'),
+('Cliente10', 'cliente10@email.com', '8765432109', 'Dirección 10');
 
 -- Órdenes
 INSERT INTO Ordenes (id_cliente, id_producto, fecha, cantidad) VALUES
+-- Órdenes para Cliente1
 (1, 1, '2024-01-01', 5),
-(1, 2, '2024-01-02', 3)
+(1, 2, '2024-01-02', 3),
+(1, 3, '2024-01-03', 2),
+(1, 4, '2024-01-04', 1),
+(1, 5, '2024-01-05', 4),
+(1, 6, '2024-01-06', 2),
+(1, 7, '2024-01-07', 6),
+(1, 8, '2024-01-08', 3),
+(1, 9, '2024-01-09', 7),
+(1, 10, '2024-01-10', 5),
+
+-- Órdenes para Cliente2
+(2, 1, '2024-02-01', 1),
+(2, 2, '2024-02-02', 2),
+(2, 3, '2024-02-03', 3),
+(2, 4, '2024-02-04', 4),
+(2, 5, '2024-02-05', 5),
+(2, 6, '2024-02-06', 1),
+(2, 7, '2024-02-07', 2),
+(2, 8, '2024-02-08', 3),
+(2, 9, '2024-02-09', 4),
+(2, 10, '2024-02-10', 5),
+
+-- Órdenes para Cliente3
+(3, 1, '2024-03-01', 2),
+(3, 2, '2024-03-02', 4),
+(3, 3, '2024-03-03', 6),
+(3, 4, '2024-03-04', 3),
+(3, 5, '2024-03-05', 1),
+(3, 6, '2024-03-06', 2),
+(3, 7, '2024-03-07', 5),
+(3, 8, '2024-03-08', 4),
+(3, 9, '2024-03-09', 2),
+(3, 10, '2024-03-10', 1);
+
+-- Repite este patrón para Clientes4 a Clientes10 asegurándote de variar fechas, productos y cantidades.
 
 ```
 
