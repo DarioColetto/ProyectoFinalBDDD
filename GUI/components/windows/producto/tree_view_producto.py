@@ -9,16 +9,12 @@ from ...ttk_styles import TreeViewStyle
 
 class ProductoView(Treeview):
 
-    repo = ProductoRepo()
-    
 
     def __init__(self, master):
           
         columns_ids = ['#1','#2','#3', '#4', '#5', '#6']
         columns_names = ["Id","Nombre","Descripcion", "Categoria", "Precio", "Stock"]
-        
         super().__init__(master, columns=columns_ids ,show="headings", selectmode='browse')
-        
         self.pack(side='left', fill='both', expand=True)
 
         self.string_listener = StringVar(self)
@@ -27,7 +23,7 @@ class ProductoView(Treeview):
         
         self.widgetFrame = ProductoMenuBar(self)
         self.widgetFrame.pack(side='bottom')
-        self.pack(side='left', fill='both', expand=True)
+
 
         #STYLES
         self.style= TreeViewStyle(self)
@@ -43,21 +39,20 @@ class ProductoView(Treeview):
             self.heading(columns_ids[i], text=columns_names[i])
             self.column(columns_ids[i] ,width=160, stretch=True)
         
+        #Solo muesra las columnas indicadas por el '#ID'
+        self.config(displaycolumns=['#1', '#2','#3', '#4', '#5', '#6' ]) 
+        
         #INICIALIZA DATA
         self.load_data()
 
-        #Solo muesra las columnas indicadas por el '#ID'
-        self.config(displaycolumns=['#1', '#2','#3', '#4', '#5', '#6' ]) 
-
-        self.bind('<ButtonRelease-1>', self.get_selected_item) #Cambia el estado de los botones Edit y Delet
-        self.widgetFrame.categoria_listener.trace_add('write', self.option_selected)
-
+    
         #TRACERS
-
         self.widgetFrame.string_listener.trace_add("write", self.refresh_by_search)
         self.widgetFrame.int_var.trace_add("write", self.refresh_view)
-
+        self.widgetFrame.categoria_listener.trace_add('write', self.option_selected)
+       
         #BIndings
+        self.bind('<ButtonRelease-1>', self.get_selected_item) 
         self.bind('<KeyRelease>', self.keyReleased)
         
 

@@ -50,8 +50,20 @@ class ProductoMenuBar(Frame):
         
         self.delete_btn=Button_(self,text="Del",bg_color=self.bg_color, padx=10, compound="left" , width=self.buttonWidth, command=self.delete_window) 
         self.delete_btn.pack(side='left')
-
         
+        #TRACERS
+
+        self.string_listener.trace_add("write", self.text_changed)
+
+
+    def text_changed(self, *args): 
+        
+        entry_string = self.entry_search.get()
+
+        print(entry_string)
+        
+        if entry_string:
+            self.string_listener.set(entry_string)     
 
             
     def update_window(self):

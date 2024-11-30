@@ -59,6 +59,19 @@ class ClienteRepo(Repository):
             return f"cliente {id} eliminado."
 
 
+    def getByNombre(self, nombre: str):
+        clientes = []
+        query = """ SELECT * FROM clientes WHERE nombre LIKE %s """
+        with Conection() as cnx:
+            # Usa un wildcard con parámetros seguros.
+            cnx.execute(query, (f"%{nombre}%",))
+            rows = cnx.fetchall()
+
+            for row in rows:
+                cliente = Cliente(row[0], row[1], row[2], row[3], row[4]) 
+                clientes.append(cliente)
+
+        return clientes
 
 
     

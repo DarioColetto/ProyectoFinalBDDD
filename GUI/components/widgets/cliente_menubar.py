@@ -14,17 +14,14 @@ class ClienteMenuBar(Frame):
     cliente:Cliente
     bg_color="darkgoldenrod2"
     
-    def __init__(self, master, int_var:IntVar, string_listener:StringVar ):
+    def __init__(self, master ):
         
         super().__init__(master, background=self.bg_color )
-        
-        self.string_listener = string_listener
-        self.int_var= int_var
-        
         self.pack(side='top', fill="both",  pady=5) 
-
-
-        # self.search_label_icon = search_icon()
+       
+        self.string_listener = StringVar(self, '') 
+        self.int_var =  IntVar(self, 0)
+        
         self.search_label=Label(self,width=20, background=self.bg_color ,text="Buscar")
         self.search_label.pack(side='left')
 
@@ -32,15 +29,12 @@ class ClienteMenuBar(Frame):
         self.entry_search.pack(side='left')
         self.entry_search.focus()
         
-        # self.add_btn_icon = add_icon()
         self.add_btn=Button_(self,bg_color=self.bg_color, padx=10, text="Add",compound="left", width=self.buttonWidth, command = self.create_window )
         self.add_btn.pack(side='left')
 
-        # self.update_btn_icon = update_icon()
         self.update_btn=Button_(self,text="Edit", bg_color=self.bg_color, padx=10 , compound="left" , width=self.buttonWidth ,command=self.update_window )
         self.update_btn.pack(side='left')
 
-        # self.delete_btn_icon = delete_icon()
         self.delete_btn=Button_(self,text="Del",bg_color=self.bg_color, padx=10, compound="left" , width=self.buttonWidth, command=self.delete_window) 
         self.delete_btn.pack(side='left') 
 

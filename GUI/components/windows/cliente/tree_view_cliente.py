@@ -9,8 +9,6 @@ from repository.clienteRepo import ClienteRepo
 class ClienteView(Treeview):
 
 
-    cliente:Cliente
-
     def __init__(self, master):
         
         columns_ids = ['#1','#2','#3', '#4', '#5']
@@ -21,7 +19,7 @@ class ClienteView(Treeview):
         self.string_listener = StringVar(self)
         self.int_var = IntVar(self)
         
-        self.widgetFrame = ClienteMenuBar(self, self.int_var, self.string_listener)
+        self.widgetFrame = ClienteMenuBar(self)
         self.widgetFrame.pack(side='bottom')
        
 
@@ -43,15 +41,15 @@ class ClienteView(Treeview):
         
         
         self.load_data()
-        self.bind('<ButtonRelease-1>', self.get_selected_item) #Cambia el estado de los botones Edit y Delet
+        
 
         #TRACERS
+        self.widgetFrame.string_listener.trace_add("write", self.refresh_by_search)
+        self.widgetFrame.int_var.trace_add("write", self.refresh_view)
 
-        self.string_listener.trace_add("read", self.refresh_view)
-        self.int_var.trace_add("write", self.refresh_view)
-
-
-        
+        #BIndings
+        self.bind('<ButtonRelease-1>', self.get_selected_item) 
+        self.bind('<KeyRelease>', self.keyReleased)
 
     def load_data(self,  *arg):
         
@@ -64,39 +62,48 @@ class ClienteView(Treeview):
             self.insert("", "end", text=row, values= (row.id_cliente, row.nombre, row.email, row.telefono,  row.direccion))
 
     def get_selected_item(self,  *arg):
-        
-        row = self.item(self.selection())
-        values =  row["values"] 
 
-        self.cliente = Cliente(
-            id_cliente= values[0],
-            nombre= values[1],
-            email=values[2],
-            telefono= str(values[3]),
-            direccion=values[4]
+        try:
+            row = self.item(self.selection())
+            values =  row["values"] 
+        
+            row = self.item(self.selection())
+            values =  row["values"] 
 
-        )
+            self.cliente = Cliente(
+                id_cliente= values[0],
+                nombre= values[1],
+                email=values[2],
+                telefono= str(values[3]),
+                direccion=values[4]
+
+            )
 
         
-        self.widgetFrame.cliente =  self.cliente 
-        
+            self.widgetFrame.cliente =  self.cliente 
+        except IndexError:
+            print("Selecciona un item.") 
         
          
         
     def refresh_view(self,  *arg):
-
-        print(self.int_var.get())
 
         self.clean_view()
         self.load_data()    
              
 
 
-    # def refresh_by_search(self, *args):
+    def refresh_by_search(self, *args):
 
-    #     rows = Repository().get_by_query(common.string_listener.get())
-    #     self.insert_rows(rows)
-    #     self.focus_row()            
+        nombre =  self.widgetFrame.string_listener.get()
+        if nombre:
+            self.clean_view()
+            rows = ClienteRepo().getByNombre(nombre)
+            self.insert_rows(rows)
+        else:
+            self.clean_view()
+            rows = ClienteRepo().get_all()
+            self.insert_rows(rows)              
 
 
     def clean_view(self):
@@ -105,17 +112,10 @@ class ClienteView(Treeview):
             self.delete(child)
 
 
+    def keyReleased(self, event):
+        print(event.keysym) 
+        key = event.keysym    
+        if key == "Up" or key == "Down":
+            self.get_selected_item()    
 
 
-
-    # def focus_row(self):
-    #     """Algoritmo para reenfocar"""
-        
-    #     children_ids = [x for x in self.get_children()] #Da todos los Id de los campos Ej.. ['I012', 'I013', 'I014', 'I015', 'I016', 'I017'...]
-    #     items=[self.item(item) for item in children_ids] #Da todos los items que tiene el child_ID
-        
-    #     for x in range(len(children_ids)):
-    #         if items[x]["values"][0] == common.id_:
-    #             self.focus(children_ids[x])   
-    #             self.selection_set(children_ids[x])
-    #             break
