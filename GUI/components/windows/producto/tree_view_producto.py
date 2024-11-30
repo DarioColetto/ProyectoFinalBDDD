@@ -25,7 +25,7 @@ class ProductoView(Treeview):
         self.int_var = IntVar(self)
         
         
-        self.widgetFrame = ProductoMenuBar(self, self.int_var )
+        self.widgetFrame = ProductoMenuBar(self)
         self.widgetFrame.pack(side='bottom')
         self.pack(side='left', fill='both', expand=True)
 
@@ -55,10 +55,13 @@ class ProductoView(Treeview):
         #TRACERS
 
         self.widgetFrame.string_listener.trace_add("write", self.refresh_by_search)
-        self.int_var.trace_add("write", self.refresh_view)
+        self.widgetFrame.int_var.trace_add("write", self.refresh_view)
 
-        # self.widgetFrame.entry_search.bind(('<<ComboboxSelected>>', self.option_selected))
+        #BIndings
+        self.bind('<KeyRelease>', self.keyReleased)
+        
 
+        
     def load_data(self,  *arg):
         
         rows = ProductoRepo().get_all()
@@ -70,26 +73,30 @@ class ProductoView(Treeview):
             self.insert("", "end", text=row, values= (row.id_producto, row.nombre, row.descripcion, row.categoria.value, row.precio, row.stock))    
 
     def get_selected_item(self,  *arg):
+
+        try:
+            row = self.item(self.selection())
+            values =  row["values"] 
+
+            self.producto = Producto(
+                id_producto= values[0],
+                nombre= values[1],
+                descripcion= values[2],
+                categoria = Categoria(values[3]),
+                precio=float (values[4]),
+                stock= int(values[5])
+
+            )
+
+            self.widgetFrame.producto = self.producto
+        except IndexError:
+            print("Selecciona un item.") 
         
-        row = self.item(self.selection())
-        values =  row["values"] 
-
-        self.producto = Producto(
-            id_producto= values[0],
-            nombre= values[1],
-            descripcion= values[2],
-            categoria = Categoria(values[3]),
-            precio=float (values[4]),
-            stock= int(values[5])
-
-        )
-
-        self.widgetFrame.producto = self.producto
-         
         
     def refresh_view(self,  *arg):
 
         self.clean_view()
+        self.load_data()
          
              
     def refresh_by_search(self, *args):
@@ -99,33 +106,33 @@ class ProductoView(Treeview):
             self.clean_view()
             rows = ProductoRepo().getByNombre(nombre)
             self.insert_rows(rows)
-        #self.focus_row()            
-
+        else:
+            self.clean_view()
+            rows = ProductoRepo().get_all()
+            self.insert_rows(rows)    
+                
 
     def clean_view(self):
-        print("cleaning")
         for child in self.get_children():
             self.delete(child)
-
 
     def option_selected(self, *args):
         value = self.widgetFrame.entry_categoria.get()
         print(value)
         
-        if value:
+        if value != "--":
             self.clean_view()
             rows = ProductoRepo().getByCategoria(value)
             self.insert_rows(rows)
+        else:
+            self.clean_view()
+            rows = ProductoRepo().get_all()
+            self.insert_rows(rows)
 
 
-    # def focus_row(self):
-    #     """Algoritmo para reenfocar"""
-        
-    #     children_ids = [x for x in self.get_children()] #Da todos los Id de los campos Ej.. ['I012', 'I013', 'I014', 'I015', 'I016', 'I017'...]
-    #     items=[self.item(item) for item in children_ids] #Da todos los items que tiene el child_ID
-        
-    #     for x in range(len(children_ids)):
-    #         if items[x]["values"][0] == common.id_:
-    #             self.focus(children_ids[x])   
-    #             self.selection_set(children_ids[x])
-    #             break
+    def keyReleased(self, event):
+        print(event.keysym) 
+        key = event.keysym    
+        if key == "Up" or key == "Down":
+            self.get_selected_item()    
+
