@@ -116,4 +116,21 @@ class ProductoRepo(Repository):
                 productos.append(producto)
 
         return productos
-    
+
+
+    def getOneByName(self, nombre:str):
+        query = "SELECT * FROM productos WHERE nombre=%s;"
+        with Conection() as cnx:
+            cnx.execute(query,  (nombre,))
+            row = cnx.fetchone()
+
+            if row:
+                return Producto(
+                id_producto= row[0], 
+                nombre= row[1], 
+                descripcion= row[2],
+                categoria= Categoria(row[3]),
+                precio= row[4], 
+                stock= row[5]) 
+                   
+            return None  

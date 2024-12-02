@@ -1,23 +1,24 @@
-from tkinter import Entry, Frame, IntVar, Label, StringVar
+from tkinter import Entry, Frame, IntVar, Label, StringVar, messagebox
 from GUI.components.widgets.Button import Button_
 
-from GUI.components.windows.cliente.create_cliente_window import CreateClienteWindow
-from GUI.components.windows.cliente.update_cliente_window import UpdateClienteWindow
-from models.cliente import Cliente
+from GUI.components.windows.ordenes.create_orden import CreateOrdenWindow
+from models.orden import Orden
+from models.ordenDTO import OrdenDTO
+from repository.ordenRepo import OrdenRepo
 
 
-class ClienteMenuBar(Frame):
+class OrdenMenuBar(Frame):
     
     buttonWidth = 15
-    cliente:Cliente
+    orden:OrdenDTO
     bg_color="darkgoldenrod2"
     
-    def __init__(self, master, int_var:IntVar, string_listener:StringVar ):
+    def __init__(self, master ):
         
         super().__init__(master, background=self.bg_color )
         
-        self.string_listener = string_listener
-        self.int_var= int_var
+        self.string_listener = StringVar(self, '') 
+        self.int_var =  IntVar(self, 0)
         
         self.pack(side='top', fill="both",  pady=5) 
 
@@ -59,12 +60,17 @@ class ClienteMenuBar(Frame):
             
     def update_window(self):
        
-        self.updateWindow = UpdateClienteWindow(self, self.cliente, self.int_var)
-        
+        #UpdateOrdenWindow(self, self.orden, self.int_var)
+        pass
         
     def create_window(self):
-        return CreateClienteWindow(self )
+        CreateOrdenWindow(self, self.int_var )
     
 
-    def setStringListener():
-        pass
+    def delete_window(self):
+        
+        resp = messagebox.askyesno("Eliminar",  f"Desea elimnirar {self.orden.id_orden}" )
+        if resp:
+            OrdenRepo().delete(self.orden.id_orden)
+            self.int_var.set(self.orden.id_orden)
+        
