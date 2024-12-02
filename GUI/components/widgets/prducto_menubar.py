@@ -50,6 +50,11 @@ class ProductoMenuBar(Frame):
         
         self.delete_btn=Button_(self,text="Del",bg_color=self.bg_color, padx=10, compound="left" , width=self.buttonWidth, command=self.delete_window) 
         self.delete_btn.pack(side='left')
+
+
+        self.mas_vendido_btn=Button_(self,text="Reporte Mas Vendido",bg_color=self.bg_color, padx=10, compound="left" , width=self.buttonWidth, command=self.verMasVendido) 
+        self.mas_vendido_btn.pack(side='left')
+        
         
         #TRACERS
 
@@ -80,4 +85,12 @@ class ProductoMenuBar(Frame):
             self.int_var.set(self.producto.id_producto)
 
 
-      
+    def verMasVendido(self):
+
+        productos = ProductoRepo().productosMasVendidos()
+
+        string = "Nombre  Total Vendido\n"
+        for p in productos:
+            string += f"{p[0]}...{p[1]}\n" 
+
+        messagebox.showinfo("Productos mas vendidos", message=string)    

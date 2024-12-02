@@ -133,4 +133,22 @@ class ProductoRepo(Repository):
                 precio= row[4], 
                 stock= row[5]) 
                    
-            return None  
+            return None
+
+    def productosMasVendidos(self):
+
+        
+        query ="""SELECT Productos.nombre, SUM(Ordenes.cantidad) AS total_vendido
+                    FROM Ordenes
+                    JOIN Productos ON Ordenes.id_producto = Productos.id_producto
+                    GROUP BY Productos.nombre
+                    HAVING total_vendido > 0
+                    ORDER BY total_vendido DESC;"""
+
+    
+        with Conection() as cnx:
+            cnx.execute(query)
+            rows = cnx.fetchall()
+
+        return rows
+              
