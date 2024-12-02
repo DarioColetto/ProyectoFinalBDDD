@@ -188,7 +188,7 @@ config = {
         'host':'127.0.0.1',
         'user':'root',
         'password':'password',
-        'database':'dababasename'
+        'database':'databasename'
 }
 ```
 
@@ -205,3 +205,10 @@ from config import config
 ## EJECUCION
 
 La entrada o punto de ejecucion es el archivo `__main__.py`
+
+
+### EJEMPLOS DE VISTA 
+![alt text](https://github.com/DarioColetto/ProyectoFinalBDDD/blob/main/img/clientes.PNG)
+![alt text](https://github.com/DarioColetto/ProyectoFinalBDDD/blob/main/img/addclientes.PNG)
+![alt text](https://github.com/DarioColetto/ProyectoFinalBDDD/blob/main/img/buscarcliente.PNG)
+![alt text](https://github.com/DarioColetto/ProyectoFinalBDDD/blob/main/img/delcliente.PNG)
