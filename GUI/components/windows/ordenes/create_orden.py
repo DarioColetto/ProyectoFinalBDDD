@@ -47,7 +47,7 @@ class CreateOrdenWindow(NewWindow):
         self.label_cantidad=Label(self.frame , text="Cantidad" ,background="darkgoldenrod2",compound='right',padx=5 ,  )
         self.label_cantidad.grid(column=0, row=3, pady=3, sticky='e')
      
-        self.entry_cantidad=Spinbox(self.frame, from_=0 , to=1000 )
+        self.entry_cantidad=Spinbox(self.frame, from_=0 , to=12)
         self.entry_cantidad.grid(column=1, row=3)
         
 

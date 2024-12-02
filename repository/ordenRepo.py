@@ -105,4 +105,13 @@ class OrdenRepo(Repository):
                    
             
 
-    
+    def actualizar_cantidad_maxima(self, id_producto: int, cantidad_maxima: int):
+        query = """
+            UPDATE Ordenes
+            SET cantidad = LEAST(cantidad, %s)
+            WHERE id_producto = %s;
+        """
+        with Conection() as cnx:
+            cnx.execute(query, (cantidad_maxima, id_producto))
+            filas_afectadas = cnx.rowcount  # Cantidad de filas actualizadas
+        return f"{filas_afectadas} Ã³rdenes actualizadas."
