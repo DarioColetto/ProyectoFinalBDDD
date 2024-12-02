@@ -43,18 +43,22 @@ class OrdenRepo(Repository):
         return ordenes
 
     def get(self, id:int):
-        query = "SELECT * FROM ordenes WHERE id_orden=%s;"
+        query = """SELECT Ordenes.Id_orden, Clientes.nombre AS cliente, Productos.nombre AS producto, Ordenes.cantidad, Ordenes.fecha
+                FROM Ordenes
+                INNER JOIN Clientes ON Ordenes.id_cliente = Clientes.id_cliente
+                INNER JOIN Productos ON Ordenes.id_producto = Productos.id_producto
+                WHERE id_orden=%s;"""
         with Conection() as cnx:
             cnx.execute(query,  (id,))
             row = cnx.fetchone()
 
             if row:
-                return Orden(
+                return OrdenDTO(
                 id_orden=row[0],
-                id_cliente= row[1], 
-                id_producto=row[2], 
-                fecha=row[3],
-                cantidad=  row[4])        
+                cliente= row[1], 
+                producto=row[2],
+                cantidad=  row[3],  
+                fecha=row[4])        
             return None
 
 
@@ -75,6 +79,30 @@ class OrdenRepo(Repository):
             return f"orden {id} eliminado."
 
 
+    def getByName(self, nombre:str):
+        ordenes = []
+        query = """SELECT Ordenes.Id_orden, Clientes.nombre AS cliente, Productos.nombre AS producto, Ordenes.cantidad, Ordenes.fecha
+                FROM Ordenes
+                INNER JOIN Clientes ON Ordenes.id_cliente = Clientes.id_cliente
+                INNER JOIN Productos ON Ordenes.id_producto = Productos.id_producto
+                WHERE Clientes.nombre LIKE %s ;"""
+        with Conection() as cnx:
+            cnx.execute(query,  (f"{nombre}%",))
+            rows = cnx.fetchall()
 
+        for row in rows:    
+
+            orden = OrdenDTO(
+                id_orden=row[0],
+                cliente= row[1], 
+                producto=row[2],
+                cantidad=  row[3],  
+                fecha=row[4])
+                
+            ordenes.append(orden)
+            
+        return ordenes
+                   
+            
 
     

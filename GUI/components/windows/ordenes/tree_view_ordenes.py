@@ -44,7 +44,8 @@ class OrdenesView(Treeview):
         self.load_data()
        
         #TRACERS
-        self.widgetFrame.string_listener.trace_add("write", self.refresh_by_search)
+        self.widgetFrame.string_listener_id.trace_add("write", self.refresh_by_search_id)
+        self.widgetFrame.string_listener_name.trace_add("write", self.refresh_by_search_name)
         self.widgetFrame.int_var.trace_add("write", self.refresh_view)
 
         #BIndings
@@ -89,17 +90,35 @@ class OrdenesView(Treeview):
         self.clean_view()
         self.load_data()
 
-    def refresh_by_search(self, *args):
+    def refresh_by_search_id(self, *args):
 
-        nombre =  self.widgetFrame.string_listener.get()
-        if nombre:
+        value =  self.widgetFrame.string_listener_id.get()
+        
+        if value.isdigit():
+
             self.clean_view()
-            rows = OrdenRepo().getByNombre(nombre)
-            self.insert_rows(rows)
+            row = OrdenRepo().get(int( value))
+            if row:
+                self.insert("", "end", text=row, values=(row.id_orden ,row.cliente, row.producto, row.fecha, row.cantidad))    
         else:
             self.clean_view()
             rows = OrdenRepo().get_all()
-            self.insert_rows(rows)                  
+            self.insert_rows(rows)
+
+
+    def refresh_by_search_name(self, *args):
+
+        value =  self.widgetFrame.string_listener_name.get()
+        
+        if len(value) > 3: 
+            self.clean_view()
+            rows = OrdenRepo().getByName(value)
+            if rows:
+                self.insert_rows(rows)
+        else:
+            self.clean_view()
+            rows = OrdenRepo().get_all()
+            self.insert_rows(rows)                                
              
 
     def clean_view(self):
