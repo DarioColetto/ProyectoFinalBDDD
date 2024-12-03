@@ -1,10 +1,8 @@
 from datetime import date
 from tkinter import Entry, Frame, IntVar, Label, Spinbox, messagebox
 from GUI.components.windows.new_window import NewWindow
-from models.cliente import Cliente
 from models.orden import Orden
 from GUI.components.widgets.Button import Button_
-
 from repository.clienteRepo import ClienteRepo
 from repository.ordenRepo import OrdenRepo
 from repository.productoRepo import ProductoRepo
@@ -24,12 +22,12 @@ class CreateOrdenWindow(NewWindow):
         self.frame.pack(fill="both", padx=5, pady=5 , expand=True)
         
        
-        self.label_nombre=Label(self.frame ,text="Nombre", background="darkgoldenrod2", compound='right', padx=5 )
-        self.label_nombre.grid(column=0, row=0, pady=3, sticky='e')      
+        # self.label_nombre=Label(self.frame ,text="Nombre", background="darkgoldenrod2", compound='right', padx=5 )
+        # self.label_nombre.grid(column=0, row=0, pady=3, sticky='e')      
         
-        self.entry_nombre=Entry(self.frame )
-        self.entry_nombre.grid(column=1, row=0)
-        self.entry_nombre.focus()
+        # self.entry_nombre=Entry(self.frame )
+        # self.entry_nombre.grid(column=1, row=0)
+        # self.entry_nombre.focus()
 
         self.label_idCliente=Label(self.frame, text="Id Cliente", background="darkgoldenrod2",   compound='right' ,padx=5 )
         self.label_idCliente.grid(column=0, row=1,pady=3, sticky='e')
@@ -72,27 +70,41 @@ class CreateOrdenWindow(NewWindow):
              
         finally:
             try:
-                nombre = self.entry_nombre.get()
+                
                 id_cliente = int(self.entry_idCliente.get())
                 nombre_producto = self.entry_producto.get()
                 cantidad = int(self.entry_cantidad.get())
                 fecha = date.today()
-                producto = ProductoRepo().getOneByName(nombre_producto)
-                
 
-                if producto:
+                producto =  ProductoRepo().getOneByName(nombre_producto)
+
+                stock = ProductoRepo().getStockByName(nombre_producto)[0]
+                
+                if not None: 
+                    stock= int(stock )
+
+                if not ClienteRepo().get(id_cliente):
+                    messagebox.showerror("Cliente inexistente" , "El cliente no se encuentra guardado.")
+
+                elif not producto:   
+                    messagebox.showerror("Producto inexistente" , "El producto no se encuentra.")
+                
+                elif stock < cantidad:
+                    messagebox.showerror("Stock insuficiente" , "No hay stock.")
+
+                else:
                      
                     orden = Orden(None, id_cliente,producto.id_producto, fecha, cantidad )
-                    OrdenRepo().create(orden)
+                    id_orden = OrdenRepo().create(orden)
                     resp = messagebox.askyesno("Crear orden ?", 
                                         message=f"""Desea crear Orden: 
-                                                    Nombre: {nombre}
+                                                    
                                                     Producto: {nombre_producto}
                                                     Cantidad: {cantidad}
                                                     Fecha: {fecha}
                     """)
                     if resp:
-                        messagebox.showinfo(message=f"Orden creada", title="Orden") 
+                        messagebox.showinfo(message=f"Orden {id_orden} creada", title="Orden") 
                         self.intvar.set(1)
                         self.destroy()
         

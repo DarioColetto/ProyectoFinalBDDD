@@ -151,4 +151,12 @@ class ProductoRepo(Repository):
             rows = cnx.fetchall()
 
         return rows
-              
+    
+    def getStockByName(self, nombre:str ):
+        query = "SELECT stock FROM productos WHERE nombre=%s;"
+        with Conection() as cnx:
+            cnx.execute(query,  (nombre,))
+            row = cnx.fetchone()
+
+            if row:
+                return row
