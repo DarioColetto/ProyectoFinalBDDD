@@ -55,7 +55,7 @@ Las entidades clave son:
 
 #### 2. Estructura de Tablas
 ```sql
-CREATE TABLE Productos (
+CREATE TABLE productos (
     id_producto INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT,
@@ -64,7 +64,7 @@ CREATE TABLE Productos (
     stock INT NOT NULL
 );
 
-CREATE TABLE Clientes (
+CREATE TABLE clientes (
     id_cliente INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE Clientes (
     direccion TEXT
 );
 
-CREATE TABLE Ordenes (
+CREATE TABLE ordenes (
     id_orden INT AUTO_INCREMENT PRIMARY KEY,
     id_cliente INT NOT NULL,
     id_producto INT NOT NULL,
@@ -89,11 +89,13 @@ CREATE TABLE Ordenes (
 ```
 
 #### 3. Datos Iniciales
-Inserta algunos datos iniciales en las tablas para realizar pruebas:
+Inserta algunos datos iniciales en las tablas para realizar pruebas  , ver archivos SQL !!.
+
+Ejemplo:
 
 ```sql
 -- Productos
-INSERT INTO Productos (nombre, descripcion, categoria, precio, stock) VALUES
+INSERT INTO productos (nombre, descripcion, categoria, precio, stock) VALUES
 ('Producto1', 'Descripción de Producto1', 'Categoria1', 10.00, 100),
 ('Producto2', 'Descripción de Producto2', 'Categoria2', 15.00, 50),
 ('Producto3', 'Descripción de Producto3', 'Categoria3', 20.00, 30),
@@ -106,7 +108,7 @@ INSERT INTO Productos (nombre, descripcion, categoria, precio, stock) VALUES
 ('Producto10', 'Descripción de Producto10', 'Categoria1', 55.00, 5);
 
 -- Clientes
-INSERT INTO Clientes (nombre, email, telefono, direccion) VALUES
+INSERT INTO clientes (nombre, email, telefono, direccion) VALUES
 ('Cliente1', 'cliente1@email.com', '1234567890', 'Dirección 1'),
 ('Cliente2', 'cliente2@email.com', '0987654321', 'Dirección 2'),
 ('Cliente3', 'cliente3@email.com', '5678901234', 'Dirección 3'),
@@ -119,7 +121,7 @@ INSERT INTO Clientes (nombre, email, telefono, direccion) VALUES
 ('Cliente10', 'cliente10@email.com', '8765432109', 'Dirección 10');
 
 -- Órdenes
-INSERT INTO Ordenes (id_cliente, id_producto, fecha, cantidad) VALUES
+INSERT INTO ordenes (id_cliente, id_producto, fecha, cantidad) VALUES
 -- Órdenes para Cliente1
 (1, 1, '2024-01-01', 5),
 (1, 2, '2024-01-02', 3),
@@ -178,9 +180,9 @@ https://dev.mysql.com/doc/connector-python/en/connector-python-installation.html
 pip install mysql-connector-python
 ```
 
-### Crear archivo `config.py`
+### Crear o modificar archivo `config.py`
 
-Crear un archivo `config.py` en la carpeta raiz preferentemente, o ubicarlo en donde desee. El archivo contendra los datos de conexion a la base de datos en formato **dict**. 
+Crear o modificar el archivo `config.py` en la carpeta raiz preferentemente, o ubicarlo en donde desee. El archivo contendra los datos de conexion a la base de datos en formato **dict**. 
 Cambie los datos que crea necesarios como *password* y *databasename* (nombre de su base de datos).
 
 ```python
