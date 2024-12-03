@@ -7,15 +7,18 @@ from models.orden import Orden
 class OrdenRepo(Repository):
 
     def create(self, orden: Orden):
-        query = """
-            INSERT INTO ordenes (id_cliente, id_producto, fecha, cantidad)
-            VALUES (%s, %s, %s, %s);
-        """
-        params = (orden.id_cliente, orden.id_producto, orden.fecha, orden.cantidad)
-        
+        query = "CALL nueva_orden(%s, %s, %s, %s, @id_orden);"
+        get_id_query = "SELECT @id_orden;"
+        params = (orden.id_cliente, orden.id_producto, orden.cantidad, orden.fecha)
+
         with Conection() as cnx:
+            # Execute the stored procedure
             cnx.execute(query, params)
-            orden_id = cnx.lastrowid  # Devuelve el auto-incremented ID del nuevo objeto insertado.
+            # Fetch the output parameter
+            cnx.execute(get_id_query)
+            result = cnx.fetchone()
+            orden_id = result[0] if result else None  # Get the returned ID or None
+
         return orden_id
 
     def get_all(self):
