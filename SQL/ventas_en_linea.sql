@@ -16,14 +16,10 @@ CREATE TABLE `clientes` (
   `direccion` text,
   PRIMARY KEY (`id_cliente`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 
---
--- Dumping data for table `clientes`
---
-
-INSERT INTO Clientes (nombre, email, telefono, direccion) VALUES
+INSERT INTO clientes (nombre, email, telefono, direccion) VALUES
 ('Cliente1', 'cliente1@email.com', '1234567890', 'Dirección 1'),
 ('Cliente2', 'cliente2@email.com', '0987654321', 'Dirección 2'),
 ('Cliente3', 'cliente3@email.com', '5678901234', 'Dirección 3'),
@@ -47,13 +43,10 @@ CREATE TABLE `productos` (
   `stock` int NOT NULL,
   PRIMARY KEY (`id_producto`),
   UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
---
--- Dumping data for table `productos`
---
 
-INSERT INTO Productos (nombre, descripcion, categoria, precio, stock) VALUES
+INSERT INTO productos (nombre, descripcion, categoria, precio, stock) VALUES
 ('Producto1', 'Descripción de Producto1', 'Categoria1', 10.00, 100),
 ('Producto2', 'Descripción de Producto2', 'Categoria2', 15.00, 50),
 ('Producto3', 'Descripción de Producto3', 'Categoria3', 20.00, 30),
@@ -65,10 +58,6 @@ INSERT INTO Productos (nombre, descripcion, categoria, precio, stock) VALUES
 ('Producto9', 'Descripción de Producto9', 'Categoria3', 50.00, 35),
 ('Producto10', 'Descripción de Producto10', 'Categoria1', 55.00, 5);
 
-
---
--- Table structure for table `ordenes`
---
 
 DROP TABLE IF EXISTS `ordenes`;
 CREATE TABLE `ordenes` (
@@ -82,11 +71,10 @@ CREATE TABLE `ordenes` (
   KEY `idx_cliente` (`id_cliente`),
   CONSTRAINT `ordenes_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id_cliente`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `ordenes_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
+);
 
 -- Órdenes
-INSERT INTO Ordenes (id_cliente, id_producto, fecha, cantidad) VALUES
+INSERT INTO ordenes (id_cliente, id_producto, fecha, cantidad) VALUES
 -- Órdenes para Cliente1
 (1, 1, '2024-01-15', 5),
 (1, 2, '2024-02-10', 3),
@@ -209,4 +197,59 @@ INSERT INTO Ordenes (id_cliente, id_producto, fecha, cantidad) VALUES
 
 
 
+--Procedures
 
+--Agregar nueva orden
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `nueva_orden`(
+    IN cliente INT, 
+    IN producto INT, 
+    IN cant INT, 
+    IN fecha DATE,
+    OUT id_orden INT
+)
+BEGIN
+    DECLARE stock_disponible INT;
+    DECLARE cliente_existente INT;
+
+    START TRANSACTION;
+
+    -- Check if the client exists
+    SELECT COUNT(*) INTO cliente_existente
+    FROM clientes
+    WHERE id_cliente = cliente;
+
+    IF cliente_existente = 0 THEN
+        -- If client does not exist, rollback and set id_orden to NULL
+        SET id_orden = NULL;
+        ROLLBACK;
+    ELSE
+        -- Check stock availability
+        SELECT stock INTO stock_disponible
+        FROM productos
+        WHERE id_producto = producto;
+
+        IF stock_disponible >= cant THEN
+            -- Insert the new order
+            INSERT INTO ordenes (id_cliente, id_producto, fecha, cantidad)
+            VALUES (cliente, producto, fecha, cant);
+
+            -- Update product stock
+            UPDATE productos
+            SET stock = stock - cant
+            WHERE id_producto = producto;
+
+            -- Get the ID of the new order
+            SET id_orden = LAST_INSERT_ID();
+
+            COMMIT;
+        ELSE
+            -- Rollback if not enough stock
+            SET id_orden = NULL; -- Indicate failure with NULL
+            ROLLBACK;
+        END IF;
+    END IF;
+END$$
+
+DELIMITER ;
