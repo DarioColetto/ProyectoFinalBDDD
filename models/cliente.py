@@ -55,6 +55,7 @@ class Cliente:
             'id_cliente':self.id_cliente,
             'nombre':self.nombre,
             'telefono':self.telefono,
+            'email':self.email,
             'direccion':self.direccion
         }
     

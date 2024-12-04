@@ -48,6 +48,8 @@ class ClienteRepo(Repository):
         query = f"UPDATE clientes SET {columns} WHERE id_cliente = %s;"
         params = list(data.values()) + [id]
 
+        print(query)
+
         with Conection() as cnx:
             cnx.execute(query, params)            
         return f"cliente {id} actualizado."
