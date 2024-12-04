@@ -2,6 +2,7 @@ from tkinter import Entry, Frame, IntVar, Label, StringVar, messagebox
 from GUI.components.widgets.Button import Button_
 
 from GUI.components.windows.ordenes.create_orden import CreateOrdenWindow
+from GUI.components.windows.ordenes.update_orden_window import UpdateOrdenWindow
 from models.orden import Orden
 from models.ordenDTO import OrdenDTO
 from repository.ordenRepo import OrdenRepo
@@ -70,8 +71,8 @@ class OrdenMenuBar(Frame):
             
     def update_window(self):
        
-        #UpdateOrdenWindow(self, self.orden, self.int_var)
-        pass
+        UpdateOrdenWindow(self, self.orden, self.int_var)
+        
         
     def create_window(self):
         CreateOrdenWindow(self, self.int_var )

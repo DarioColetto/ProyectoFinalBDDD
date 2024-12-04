@@ -64,11 +64,29 @@ class OrdenRepo(Repository):
                 fecha=row[4])        
             return None
 
+    def getOrden(self, id:int):
+        query = """SELECT Ordenes.Id_orden, Clientes.id_cliente, Productos.id_producto, Ordenes.cantidad, Ordenes.fecha
+                FROM Ordenes
+                INNER JOIN Clientes ON Ordenes.id_cliente = Clientes.id_cliente
+                INNER JOIN Productos ON Ordenes.id_producto = Productos.id_producto
+                WHERE id_orden=%s;"""
+        with Conection() as cnx:
+            cnx.execute(query,  (id,))
+            row = cnx.fetchone()
+
+            if row:
+                return Orden(
+                id_orden=row[0],
+                id_cliente= row[1], 
+                id_producto=row[2],
+                cantidad=  row[3],  
+                fecha=row[4])        
+            return None
 
     def update(self, id: int, data: dict):
         # Construlle el SET de manera dinamica
         columns = ", ".join([f"{key} = %s" for key in data.keys()])
-        query = f"UPDATE orden SET {columns} WHERE id_orden = %s;"
+        query = f"UPDATE ordenes SET {columns} WHERE id_orden = %s;"
         params = list(data.values()) + [id]
 
         with Conection() as cnx:

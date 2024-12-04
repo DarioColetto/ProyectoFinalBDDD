@@ -54,3 +54,14 @@ class Orden:
         if not isinstance(value, int) or value <= 0:
             raise ValueError("La cantidad debe ser un número entero positivo.")
         self._cantidad = value
+
+
+    def toDict(self)->dict:
+            return{
+                'id_orden':self.id_orden,
+                'id_cliente':self.id_cliente,
+                'id_producto':self.id_producto,
+                'fecha':self.fecha,
+                'cantidad':self.cantidad
+                
+            }    
