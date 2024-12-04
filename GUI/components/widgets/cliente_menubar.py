@@ -66,5 +66,9 @@ class ClienteMenuBar(Frame):
         
         resp = messagebox.askyesno("Eliminar",  f"Desea elimnirar {self.cliente.nombre}" )
         if resp:
-            ClienteRepo().delete(self.cliente.id_cliente)
-            self.int_var.set(self.cliente.id_cliente)
+            result = ClienteRepo().delete(self.cliente.id_cliente)
+            if result:
+                messagebox.showinfo("Eliminado", message= f"cliente {self.cliente.nombre} eliminado.")
+                self.int_var.set(self.cliente.id_cliente)
+            else:
+                messagebox.showinfo("Eliminado", message= "No se puede eliminar el cliente, tiene ordenes asociadas.")

@@ -56,10 +56,13 @@ class ClienteRepo(Repository):
 
     def delete(self, id: int):
             query = "DELETE FROM clientes WHERE id_cliente = %s;"
-            with Conection() as cnx:
-                cnx.execute(query, (id,))
-            return f"cliente {id} eliminado."
 
+            try:
+                with Conection() as cnx:
+                    cnx.execute(query, (id,))
+                return True
+            except:
+                return False
 
     def getByNombre(self, nombre: str):
         clientes = []
