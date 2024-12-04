@@ -81,9 +81,12 @@ class ProductoMenuBar(Frame):
         
         resp = messagebox.askyesno("Eliminar",  f"Desea elimnirar {self.producto.nombre}" )
         if resp:
-            ProductoRepo().delete(self.producto.id_producto)
-            self.int_var.set(self.producto.id_producto)
-
+            result = ProductoRepo().delete(self.producto.id_producto)
+            if result:
+                messagebox.showinfo("Eliminado", message= f"Producto {self.producto.nombre} eliminado.")
+                self.int_var.set(self.producto.id_producto)
+            else:
+                messagebox.showinfo("Eliminado", message= "No se puede eliminar el producto, tiene ordenes asociadas.")
 
     def verMasVendido(self):
 

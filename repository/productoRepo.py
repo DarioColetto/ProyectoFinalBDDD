@@ -69,9 +69,13 @@ class ProductoRepo(Repository):
 
     def delete(self, id: int):
             query = "DELETE FROM productos WHERE id_producto = %s;"
-            with Conection() as cnx:
-                cnx.execute(query, (id,))
-            return f"Producto {id} eliminado."
+            
+            try:
+                with Conection() as cnx:
+                    cnx.execute(query, (id,))
+                return True
+            except:
+                return False
 
 
     def getByNombre(self, nombre: str):
