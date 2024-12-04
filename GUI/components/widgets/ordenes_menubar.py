@@ -46,9 +46,9 @@ class OrdenMenuBar(Frame):
         self.update_btn.pack(side='left')
 
 
-        self.delete_btn=Button_(self,text="Del",bg_color=self.bg_color, padx=10, compound="left" , width=self.buttonWidth) #command=self.to_delete_window
-        self.delete_btn.pack(side='left') 
-
+        self.delete_btn=Button_(self,text="Del",bg_color=self.bg_color, padx=10, compound="left" , width=self.buttonWidth, command=self.delete_window) 
+        self.delete_btn.pack(side='left')
+        
         #TRACERS
 
         self.string_listener_id.trace_add("write", self.entry_id_text_changed)
@@ -57,13 +57,13 @@ class OrdenMenuBar(Frame):
     
     def entry_id_text_changed(self, *args): 
         entry_string =  self.entry_search_id.get()
-        print(entry_string)
+        
         if entry_string:
             self.string_listener_id.set(entry_string)
     
     def entry_name_text_changed(self, *args): 
         entry_string =  self.entry_search_name.get()
-        print(entry_string)
+        
         if entry_string:
             self.string_listener_name.set(entry_string)
                       
@@ -83,4 +83,4 @@ class OrdenMenuBar(Frame):
         if resp:
             OrdenRepo().delete(self.orden.id_orden)
             self.int_var.set(self.orden.id_orden)
-        
+            messagebox.showinfo('Eliminado', f"Orden{self.orden.id_orden} eliminada.")

@@ -2,7 +2,6 @@ from datetime import datetime
 from tkinter import IntVar, StringVar
 from tkinter.ttk import Treeview, Scrollbar
 from GUI.components.widgets.ordenes_menubar import OrdenMenuBar
-from models.orden import Orden
 from models.ordenDTO import OrdenDTO
 from ...ttk_styles import TreeViewStyle
 from repository.ordenRepo import OrdenRepo
@@ -68,8 +67,6 @@ class OrdenesView(Treeview):
         try:
             row = self.item(self.selection())
             values =  row["values"] 
-            print(values)
-
             date_object = datetime.strptime(values[3], '%Y-%m-%d') .date()    
 
             self.orden = OrdenDTO(
