@@ -58,7 +58,7 @@ class CreateProductoWindow(NewWindow):
         self.label_stock=Label(self.frame , text="Stock" ,background="darkgoldenrod2",compound='right',padx=5 ,  )
         self.label_stock.grid(column=0, row=4, pady=3, sticky='e')
 
-        self.entry_stock=Spinbox(self.frame, from_=0 , to=1000 )
+        self.entry_stock=Spinbox(self.frame, from_=1 , to=12 )
         self.entry_stock.grid(column=1, row=4)
 
         #Boton Agregar

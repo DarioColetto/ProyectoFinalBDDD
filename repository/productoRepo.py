@@ -142,9 +142,9 @@ class ProductoRepo(Repository):
     def productosMasVendidos(self):
 
         
-        query ="""SELECT Productos.nombre, SUM(Ordenes.cantidad) AS total_vendido
-                    FROM Ordenes
-                    JOIN Productos ON Ordenes.id_producto = Productos.id_producto
+        query ="""SELECT Productos.nombre, SUM(ordenes.cantidad) AS total_vendido
+                    FROM ordenes
+                    JOIN Productos ON ordenes.id_producto = Productos.id_producto
                     GROUP BY Productos.nombre
                     HAVING total_vendido > 0
                     ORDER BY total_vendido DESC;"""

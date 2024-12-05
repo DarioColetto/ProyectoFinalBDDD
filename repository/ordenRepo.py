@@ -1,4 +1,5 @@
 
+from datetime import date, datetime
 from models.ordenDTO import OrdenDTO
 from .reposotory import Repository
 from .database import Conection
@@ -24,10 +25,11 @@ class OrdenRepo(Repository):
     def get_all(self):
 
         ordenes = []
-        query = """SELECT Ordenes.Id_orden, Clientes.nombre AS cliente, Productos.nombre AS producto, Ordenes.cantidad, Ordenes.fecha
-                FROM Ordenes
-                INNER JOIN Clientes ON Ordenes.id_cliente = Clientes.id_cliente
-                INNER JOIN Productos ON Ordenes.id_producto = Productos.id_producto;"""
+        query = """SELECT ordenes.id_orden, clientes.id_cliente as id_cliente, clientes.nombre AS cliente, productos.id_producto,  productos.nombre AS producto, ordenes.cantidad, ordenes.fecha
+                FROM ordenes
+                INNER JOIN clientes ON ordenes.id_cliente = clientes.id_cliente
+                INNER JOIN productos ON ordenes.id_producto = productos.id_producto
+                ORDER BY ordenes.id_orden;"""
         with Conection() as cnx:
             cnx.execute(query)
             rows = cnx.fetchall()
@@ -36,39 +38,44 @@ class OrdenRepo(Repository):
 
             orden = OrdenDTO(
                 id_orden=row[0],
-                cliente= row[1], 
-                producto=row[2],
-                cantidad=  row[3],  
-                fecha=row[4])
+                id_cliente = row[1],
+                cliente= row[2], 
+                id_producto = row[3],
+                producto=row[4],
+                cantidad= row[5],
+                fecha=  row[6])
+                
                 
             ordenes.append(orden)
             
         return ordenes
 
     def get(self, id:int):
-        query = """SELECT Ordenes.Id_orden, Clientes.nombre AS cliente, Productos.nombre AS producto, Ordenes.cantidad, Ordenes.fecha
-                FROM Ordenes
-                INNER JOIN Clientes ON Ordenes.id_cliente = Clientes.id_cliente
-                INNER JOIN Productos ON Ordenes.id_producto = Productos.id_producto
+        query = """SELECT ordenes.id_orden, clientes.id_cliente as id_cliente, clientes.nombre AS cliente, productos.id_producto,  productos.nombre AS producto, ordenes.cantidad, ordenes.fecha
+                FROM ordenes
+                INNER JOIN clientes ON ordenes.id_cliente = clientes.id_cliente
+                INNER JOIN productos ON ordenes.id_producto = productos.id_producto
                 WHERE id_orden=%s;"""
         with Conection() as cnx:
             cnx.execute(query,  (id,))
             row = cnx.fetchone()
 
             if row:
-                return OrdenDTO(
+                return  OrdenDTO(
                 id_orden=row[0],
-                cliente= row[1], 
-                producto=row[2],
-                cantidad=  row[3],  
-                fecha=row[4])        
+                id_cliente = row[1],
+                cliente= row[2], 
+                id_producto = row[3],
+                producto=row[4],
+                cantidad= row[5],
+                fecha=  row[6])
             return None
 
     def getOrden(self, id:int):
-        query = """SELECT Ordenes.Id_orden, Clientes.id_cliente, Productos.id_producto, Ordenes.cantidad, Ordenes.fecha
-                FROM Ordenes
-                INNER JOIN Clientes ON Ordenes.id_cliente = Clientes.id_cliente
-                INNER JOIN Productos ON Ordenes.id_producto = Productos.id_producto
+        query = """SELECT ordenes.Id_orden, Clientes.id_cliente, Productos.id_producto, ordenes.cantidad, ordenes.fecha
+                FROM ordenes
+                INNER JOIN Clientes ON ordenes.id_cliente = Clientes.id_cliente
+                INNER JOIN Productos ON ordenes.id_producto = Productos.id_producto
                 WHERE id_orden=%s;"""
         with Conection() as cnx:
             cnx.execute(query,  (id,))
@@ -102,11 +109,12 @@ class OrdenRepo(Repository):
 
     def getByName(self, nombre:str):
         ordenes = []
-        query = """SELECT Ordenes.Id_orden, Clientes.nombre AS cliente, Productos.nombre AS producto, Ordenes.cantidad, Ordenes.fecha
-                FROM Ordenes
-                INNER JOIN Clientes ON Ordenes.id_cliente = Clientes.id_cliente
-                INNER JOIN Productos ON Ordenes.id_producto = Productos.id_producto
-                WHERE Clientes.nombre LIKE %s ;"""
+        query = """SELECT ordenes.id_orden, clientes.id_cliente as id_cliente, clientes.nombre AS cliente, productos.id_producto,  productos.nombre AS producto, ordenes.cantidad, ordenes.fecha
+                FROM ordenes
+                INNER JOIN clientes ON ordenes.id_cliente = clientes.id_cliente
+                INNER JOIN productos ON ordenes.id_producto = productos.id_producto
+                WHERE clientes.nombre LIKE %s 
+                ORDER BY clientes.nombre ;"""
         with Conection() as cnx:
             cnx.execute(query,  (f"{nombre}%",))
             rows = cnx.fetchall()
@@ -115,10 +123,12 @@ class OrdenRepo(Repository):
 
             orden = OrdenDTO(
                 id_orden=row[0],
-                cliente= row[1], 
-                producto=row[2],
-                cantidad=  row[3],  
-                fecha=row[4])
+                id_cliente = row[1],
+                cliente= row[2], 
+                id_producto = row[3],
+                producto=row[4],
+                cantidad= row[5],
+                fecha=  row[6])
                 
             ordenes.append(orden)
             
@@ -128,7 +138,7 @@ class OrdenRepo(Repository):
 
     def actualizar_cantidad_maxima(self, id_producto: int, cantidad_maxima: int):
         query = """
-            UPDATE Ordenes
+            UPDATE ordenes
             SET cantidad = LEAST(cantidad, %s)
             WHERE id_producto = %s;
         """

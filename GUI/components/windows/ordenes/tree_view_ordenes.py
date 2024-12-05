@@ -12,8 +12,8 @@ class OrdenesView(Treeview):
     def __init__(self, master):
 
 
-        columns_ids = ['#1','#2','#3', '#4', '#5']
-        columns_names = ["Orden Id","Cliente","Producto", "Fecha", "Cantidad"]
+        columns_ids = ['#1','#2','#3', '#4', '#5', '#6', '#7' ]
+        columns_names = ["Orden Id", "Id Cliente" , "Cliente","Id Producto" ,"Producto", "Fecha", "Cantidad"]
         super().__init__(master, columns=columns_ids ,show="headings", selectmode='browse')
         
         self.pack(side='left', fill='both', expand=True)
@@ -37,7 +37,7 @@ class OrdenesView(Treeview):
             self.heading(columns_ids[i], text=columns_names[i])
             self.column(columns_ids[i] ,width=160, stretch=True)
         
-        self.config(displaycolumns=['#1', '#2','#3', '#4', '#5' ]) #Solo muesra las columnas indicadas por el '#ID'
+        self.config(displaycolumns=['#1','#2','#3', '#4', '#5', '#6', '#7' ]) #Solo muesra las columnas indicadas por el '#ID'
         
         
         self.load_data()
@@ -60,21 +60,23 @@ class OrdenesView(Treeview):
     def insert_rows(self, rows:list[OrdenDTO]):
             
          for row in rows:
-            self.insert("", "end", text=row, values=(row.id_orden ,row.cliente, row.producto, row.fecha, row.cantidad))    
+            self.insert("", "end", text=row, values=(row.id_orden,row.id_cliente, row.cliente,row.id_producto ,row.producto, row.fecha, row.cantidad))    
 
     def get_selected_item(self,  *arg):
 
         try:
             row = self.item(self.selection())
             values =  row["values"] 
-            date_object = datetime.strptime(values[3], '%Y-%m-%d') .date()    
+             
 
             self.orden = OrdenDTO(
                 id_orden= int(values[0]),
-                cliente= values[1],
-                producto= values[2],
-                fecha =  date_object,
-                cantidad= int(values[4])
+                id_cliente= int(values[1]),
+                cliente= values[2],
+                id_producto= values[3],
+                producto= values[4],
+                fecha =   datetime.strptime(values[5], '%Y-%m-%d') .date(),
+                cantidad= int(values[6])
             )
 
             self.widgetFrame.orden = self.orden
@@ -96,7 +98,7 @@ class OrdenesView(Treeview):
             self.clean_view()
             row = OrdenRepo().get(int( value))
             if row:
-                self.insert("", "end", text=row, values=(row.id_orden ,row.cliente, row.producto, row.fecha, row.cantidad))    
+                self.insert("", "end", text=row, values=(row.id_orden,row.id_cliente, row.cliente,row.id_producto ,row.producto, row.fecha, row.cantidad))    
         else:
             self.clean_view()
             rows = OrdenRepo().get_all()

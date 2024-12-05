@@ -16,7 +16,7 @@ class MainWindow(Tk):
     def __init__(self):
         
         super().__init__()
-        self.geometry(config_geometry(self, 1000, 800))
+        self.geometry(config_geometry(self, 1200, 800))
         self.config(background='DarkGoldenrod2', highlightthickness=4,
                     highlightbackground="grey15", highlightcolor="grey15"),
         self.resizable(True, True)

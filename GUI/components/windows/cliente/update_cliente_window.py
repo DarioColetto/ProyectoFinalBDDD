@@ -80,7 +80,7 @@ class UpdateClienteWindow(NewWindow):
             ClienteRepo().update(cliente.id_cliente , cliente.toDict())
             self.intvar.set(self.cliente.id_cliente)
 
-            messagebox.showinfo(message=f"Cliente:{nombre} Actualizado exitosamente", title="Actualizado Creado")
+            messagebox.showinfo(message=f"Cliente:{nombre} Actualizado exitosamente", title="Actualizado")
             
             self.destroy()
                 

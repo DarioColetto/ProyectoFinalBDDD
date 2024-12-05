@@ -3,7 +3,6 @@ from GUI.components.widgets.Button import Button_
 
 from GUI.components.windows.ordenes.create_orden import CreateOrdenWindow
 from GUI.components.windows.ordenes.update_orden_window import UpdateOrdenWindow
-from models.orden import Orden
 from models.ordenDTO import OrdenDTO
 from repository.ordenRepo import OrdenRepo
 

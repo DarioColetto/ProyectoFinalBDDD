@@ -47,8 +47,8 @@ class UpdateOrdenWindow(NewWindow):
         self.label_cantidad=Label(self.frame , text="Cantidad" ,background="darkgoldenrod2",compound='right',padx=5 ,  )
         self.label_cantidad.grid(column=0, row=3, pady=3, sticky='e')
      
-        self.my_var= StringVar(self, self.orden.cantidad)
-        self.entry_cantidad=Spinbox(self.frame, textvariable=self.my_var.get() ,from_=0 , to=12)
+        self.my_var= StringVar(self, self.ordenDTO.cantidad)
+        self.entry_cantidad=Spinbox(self.frame, textvariable=self.my_var.get() ,from_=1 , to=12)
         self.entry_cantidad.grid(column=1, row=3)
            
 
@@ -107,7 +107,7 @@ class UpdateOrdenWindow(NewWindow):
                                                     Fecha: {self.ordenDTO.fecha}
                     """)
                     if resp:
-                        messagebox.showinfo(message=f"Orden {id_orden} creada", title="Orden") 
+                        messagebox.showinfo(message=f"Orden {id_orden} actualizada", title="Orden") 
                         self.intvar.set(1)
                         self.destroy()
         
